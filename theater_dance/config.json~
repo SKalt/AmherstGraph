@@ -19,7 +19,7 @@
   },
   "features": {
     "search": true,
-    "groupSelectorAttribute": "false",
+    "groupSelectorAttribute": "mainDept",
     "hoverBehavior": "default"
   },
   "informationPanel": {
