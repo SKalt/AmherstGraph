@@ -241,7 +241,7 @@ def make_course_graph(course_details, prereqs):
     # create an empty graph with all the courses as nodes, then add prereq
     # relations from the prereqs edgelist
     names_of_courses = list(course_details.keys()) + extra_courses
-    complete_course_graph = igraph.Graph(number_of_courses)
+    complete_course_graph = igraph.Graph(number_of_courses, directed=True)
     complete_course_graph.vs["name"] = names_of_courses
     complete_course_graph.add_edges(prereqs)
     return complete_course_graph
@@ -506,7 +506,7 @@ print(""" That's all folks! """)
 #for temp_dept_string in DEPT_CODES.keys():
 #    subgraph = make_subgraph(temp_dept_string, COURSE_DETAILS, \
 #                               COMPLETE_COURSE_GRAPH)
-##    print(temp_dept_string)
-##    print(subgraph.ecount())
+#    print(temp_dept_string)
+#    print(subgraph.ecount())
 #    export_json(temp_dept_string, COURSE_DETAILS, COMPLETE_COURSE_GRAPH)
 #    print(temp_dept_string + ' done')
