@@ -100,8 +100,12 @@ def get_courses(catalog_urls):
     # get all courses' urls from each major's catalog, recording their origins
     for url in catalog_urls:
         try:
+            # BCBP is an exception...
+            if 'mm/177295' in url:
+                url.replace('mm/177295', \
+                            'academiclife/departments/' + \
+                            'biochemistry-biophysics/courses')
             dept = url.split('/')[3]
-            print(dept)
             request = HTTP.request("GET", url).data
             tree = html.parse(io.BytesIO(request))
             if dept not in course_urls.keys():
@@ -112,14 +116,14 @@ def get_courses(catalog_urls):
             print(url + '!')
     return course_urls
 
-def get_related_courses(catalog_urls, dept_string):
+def get_related_courses(dept_string):
     """
     Finds the department curriculum page of a specified department, then
     returns a list of course codes related to the major, related_course_codes
     """
     x1 = '//*[@id="acad-rltd-crs"]/div/text()'
     x2 = '//*[@id="acad-rltd-crs"]/div/a/text()'
-    for url in catalog_urls:
+    for url in CATALOG_URLS:
         if dept_string in url:
             r = HTTP.request('GET', url + '?display=curriculum')
             print(r.status)
@@ -437,7 +441,7 @@ def export_json(dept_string, course_details, complete_course_graph):
 #found in their departmental catalog urls and so in the course_urls
 #dictionary to the four-digit departmental codes used elsewhere
 
-DEPT_CODES = {'Biology': 'BIOL',
+DEPT_CODES = {'Biology':                         'BIOL',
               'american_studies':                'AMST',
               'anthropology_sociology':          'ANTH', # or SOCI
               'architectural_studies':           'ARCH',
@@ -449,7 +453,6 @@ DEPT_CODES = {'Biology': 'BIOL',
               'chemistry':                       'CHEM',
               'classics':                        'CLAS',
               'computer_science':                'COSC',
-              'courses':                         'BIOL', # actually BCBP
               'economics':                       'ECON',
               'english':                         'ENGL',
               'environmental_studies':           'ENST',
@@ -517,8 +520,8 @@ if __name__ == "__main__":
 
 print(""" That's all folks! """)
 #%% temp manual debugging section
-CURRENT_CATALOG_URLS = get_catalog_urls()
-CATALOG_URLS = get_date(CURRENT_CATALOG_URLS)
+#CURRENT_CATALOG_URLS = get_catalog_urls()
+#CATALOG_URLS = get_date(CURRENT_CATALOG_URLS)
 #COURSE_URLS = get_courses(CATALOG_URLS)
 #UNIQUE_RECENT_URLS = get_most_recent_course_urls(COURSE_URLS)
 #COURSE_DETAILS = get_course_info(UNIQUE_RECENT_URLS, COURSE_URLS)
