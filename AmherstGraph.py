@@ -112,6 +112,23 @@ def get_courses(catalog_urls):
             print(url + '!')
     return course_urls
 
+def get_related_courses(catalog_urls, dept_string):
+    """
+    Finds the department curriculum page of a specified department, then
+    returns a list of course codes related to the major, related_course_codes
+    """
+    x1 = '//*[@id="acad-rltd-crs"]/div/text()'
+    x2 = '//*[@id="acad-rltd-crs"]/div/a/text()'
+    for url in catalog_urls:
+        if dept_string in url:
+            r = HTTP.request('GET', url + '?display=curriculum')
+            print(r.status)
+            tree = html.parse(io.BytesIO(r.data))
+            break
+            related_courses = tree.xpath(x1) + tree.xpath(x2)
+            related_course_codes = [title[0:8] for title in related_courses]
+    return(related_course_codes)
+    
 
 def get_most_recent_course_urls(course_urls):
     """
@@ -271,6 +288,11 @@ def make_subgraph(dept_string, course_details, complete_course_graph):
     for k in course_details.keys():
         if dept_string in course_details[k]["departments"]:
             relevant_courses.append(k)
+    related_courses = get_related_courses(dept_string)
+    for code in related_courses:
+        if code in course_details.keys():
+            relevant_courses.append(k)
+        
 
     # get the vertex ids of the relevant courses
     relevant_course_vertex_ids = []
@@ -495,8 +517,8 @@ if __name__ == "__main__":
 
 print(""" That's all folks! """)
 #%% temp manual debugging section
-#CURRENT_CATALOG_URLS = get_catalog_urls()
-#CATALOG_URLS = get_date(CURRENT_CATALOG_URLS)
+CURRENT_CATALOG_URLS = get_catalog_urls()
+CATALOG_URLS = get_date(CURRENT_CATALOG_URLS)
 #COURSE_URLS = get_courses(CATALOG_URLS)
 #UNIQUE_RECENT_URLS = get_most_recent_course_urls(COURSE_URLS)
 #COURSE_DETAILS = get_course_info(UNIQUE_RECENT_URLS, COURSE_URLS)
