@@ -123,14 +123,15 @@ def get_related_courses(dept_string):
     """
     x1 = '//*[@id="acad-rltd-crs"]/div/text()'
     x2 = '//*[@id="acad-rltd-crs"]/div/a/text()'
+    related_course_codes = []
     for url in CATALOG_URLS:
         if dept_string in url:
             r = HTTP.request('GET', url + '?display=curriculum')
             print(r.status)
             tree = html.parse(io.BytesIO(r.data))
-            break
             related_courses = tree.xpath(x1) + tree.xpath(x2)
-            related_course_codes = [title[0:8] for title in related_courses]
+            related_course_codes += [title[0:8] for title in related_courses]
+    related_course_codes = list(set(related_course_codes))
     return(related_course_codes)
     
 
@@ -227,7 +228,7 @@ def get_prereqs(course_details):
             # department
             current_dept = k[0:4]
             for word in words:
-                if word in DEPTS:
+                if word.upper() in DEPTS:
                     current_dept = word
                 if word.isnumeric() and len(word) == 3:
                     # add a (prereq, course) tuple to the edgelist
