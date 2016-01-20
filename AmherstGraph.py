@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 """
+This module defines and runs functions which scrape the Amherst College
+departmental course catalogs to create a file, data.json, which plugs
+into the Oxford Internet Institute's interactive network viewer.  This
+file contains the node and edge attributes of the network of prerequisites
+at Amherst College: which courses are required by which.
+
 Created on Mon Jan 11 13:26:45 2016
 
 @author: steven
