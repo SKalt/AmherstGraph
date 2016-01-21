@@ -97,8 +97,8 @@ function initSigma(config) {
 				// note: index may not be consistent for all nodes. Should calculate each time. 
 				 // alert(JSON.stringify(b.attr.attributes[5].val));
 				// alert(b.x);
-				a.clusters[b.label.splice(0,4)] || (a.clusters[b.label.splice(0,4)] = []);
-				a.clusters[b.label.splice(0,4)].push(b.id);//SAH: push id not label
+				a.clusters[b.label.slice(0,4)] || (a.clusters[b.label.slice(0,4)] = []);
+				a.clusters[b.label.slice(0,4)].push(b.id);//SAH: push id not label
                 a.clusters[b.label.splice(0,4)]["color"] = b.color
 			}
 		
