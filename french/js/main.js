@@ -99,7 +99,7 @@ function initSigma(config) {
 				// alert(b.x);
 				a.clusters[b.label.slice(0,4)] || (a.clusters[b.label.slice(0,4)] = []);
 				a.clusters[b.label.slice(0,4)].push(b.id);//SAH: push id not label
-                a.clusters[b.label.splice(0,4)]["color"] = b.color
+                a.clusters[b.label.slice(0,4)]["color"] = b.color
 			}
 		
 		);
@@ -278,7 +278,7 @@ function configSigmaElements(config) {
     $GP.bg2 = $(sigInst._core.domElements.bg2);
     var a = [],
         b,x=1;
-		for (b in sigInst.clusters) a.push('<div style="line-height:12px"><a href="#' + b + '"></div> ' + b + ' [' + sigInst.clusters[b].length + ' course(s)]</a></div>');
+		for (b in sigInst.clusters) a.push('<div style="line-height:12px"><a href="#' + b + '"> ' + b + ' [' + sigInst.clusters[b].length + ' course(s)]</a></div>');
     //a.sort();
     $GP.cluster.content(a.join(""));
     b = {
