@@ -97,8 +97,9 @@ function initSigma(config) {
 				// note: index may not be consistent for all nodes. Should calculate each time. 
 				 // alert(JSON.stringify(b.attr.attributes[5].val));
 				// alert(b.x);
-				a.clusters[b.color] || (a.clusters[b.color] = []);
-				a.clusters[b.color].push(b.id);//SAH: push id not label
+				a.clusters[b.label.slice(0,4)] || (a.clusters[b.label.slice(0,4)] = []);
+				a.clusters[b.label.slice(0,4)].push(b.id);//SAH: push id not label
+                a.clusters[b.label.splice(0,4)]["color"] = b.color
 			}
 		
 		);
@@ -277,7 +278,7 @@ function configSigmaElements(config) {
     $GP.bg2 = $(sigInst._core.domElements.bg2);
     var a = [],
         b,x=1;
-		for (b in sigInst.clusters) a.push('<div style="line-height:12px"><a href="#' + b + '"><div style="width:40px;height:12px;border:1px solid #fff;background:' + b + ';display:inline-block"></div> Group ' + (x++) + ' (' + sigInst.clusters[b].length + ' members)</a></div>');
+		for (b in sigInst.clusters) a.push('<div style="line-height:12px"><a href="#' + b + '"></div> ' + b + ' [' + sigInst.clusters[b].length + ' course(s)]</a></div>');
     //a.sort();
     $GP.cluster.content(a.join(""));
     b = {
@@ -372,9 +373,10 @@ function Search(a) {
         if (2 >= a.length) this.results.html("<i>You must search for a name with a minimum of 3 letters.</i>");
         else {
             sigInst.iterNodes(function (a) {
-                g.test(a.label.toLowerCase()) && c.push({
+                g.test(a.attr.attributes.Title.toLowerCase()) && c.push({
+                //g.test(a.label.toLowerCase()) && c.push({
                     id: a.id,
-                    name: a.label
+                    name: a.attr.attributes.Title
                 })
             });
             c.length ? (b = !0, nodeActive(c[0].id)) : b = showCluster(a);
